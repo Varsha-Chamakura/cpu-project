@@ -1,8 +1,4 @@
-; =====================================================
-; Hello World for custom 8-bit CPU
-; Prints "Hello, World!" then halts.
-; Uses memory-mapped output at 0x00FF.
-; =====================================================
+; Hello World program
 
 START:
     LDAI #'H'
@@ -44,7 +40,7 @@ START:
     LDAI #'!'
     STA 0x00FF
 
-    LDAI #'\n'
+    LDAI #10    ; newline (NOT #'\n', avoids stoi errors)
     STA 0x00FF
 
     HLT
