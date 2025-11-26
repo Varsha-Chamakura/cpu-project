@@ -1,0 +1,52 @@
+CPU ARCHITECTURE
+
+Registers:
+- A : 8-bit accumulator
+- B : 8-bit general-purpose register
+- PC: 16-bit program counter
+- SP: 16-bit stack pointer (not fully used in this project)
+- Z : Zero flag (1 if last result == 0)
+- C : Carry flag (1 if ADD overflowed 8 bits, or SUB borrow occurred)
+
+Buses:
+- 8-bit data bus
+- 16-bit address bus
+
+Memory:
+- 64 KB (0x0000 – 0xFFFF)
+- Implemented as uint8_t memory[65536] in C++.
+
+Memory Map:
+- 0x0000 – 0x00FE : general RAM / reserved
+- 0x00FF          : memory-mapped console output
+                     (writing a byte here prints a character)
+- 0x0100 – 0x01FF : program code (loaded by emulator)
+- 0x0200 – 0x02FF : data used by programs (Fibonacci variables)
+- 0x0300 – 0x03FF : timer example variables
+- 0x0400 – 0xFFFF : free / future use
+
+Instruction Set (ISA):
+
+Opcode  Mnemonic  Size  Description
+0x00    NOP       1     No operation
+0x01    LDAI      2     A = immediate 8-bit value (A = imm)
+0x02    LDBI      2     B = immediate 8-bit value (B = imm)
+0x03    LDA       3     A = [addr16]
+0x04    LDB       3     B = [addr16]
+0x05    STA       3     [addr16] = A
+0x06    ADD       1     A = A + B  (sets Z, C)
+0x07    SUB       1     A = A - B  (sets Z, C)
+0x08    JMP       3     PC = addr16
+0x09    JZ        3     if Z == 1 then PC = addr16
+0x0A    JNZ       3     if Z == 0 then PC = addr16
+0x0B    HLT       1     Halt CPU
+
+Addressing Modes:
+- Immediate:  LDAI #10, LDBI #0x20, LDAI #'A'
+- Direct:     LDA 0x0200, STA 0x00FF
+- Implicit:   ADD, SUB, HLT operate on registers and PC without operands.
+
+Flag Semantics:
+- Z flag: set to 1 if the result of ADD or SUB is 0, else 0.
+- C flag: for ADD, C=1 if result > 255. For SUB, C=1 if result < 0
+          (borrow occurred) in the signed intermediate.
