@@ -1,46 +1,60 @@
-; Hello World program
+; Hello World program (safe version, no character literals)
 
 START:
-    LDAI #'H'
+    ; H
+    LDAI #72
     STA 0x00FF
 
-    LDAI #'e'
+    ; e
+    LDAI #101
     STA 0x00FF
 
-    LDAI #'l'
+    ; l
+    LDAI #108
     STA 0x00FF
 
-    LDAI #'l'
+    ; l
+    LDAI #108
     STA 0x00FF
 
-    LDAI #'o'
+    ; o
+    LDAI #111
     STA 0x00FF
 
-    LDAI #','
+    ; ,
+    LDAI #44
     STA 0x00FF
 
-    LDAI #' '
+    ; space
+    LDAI #32
     STA 0x00FF
 
-    LDAI #'W'
+    ; W
+    LDAI #87
     STA 0x00FF
 
-    LDAI #'o'
+    ; o
+    LDAI #111
     STA 0x00FF
 
-    LDAI #'r'
+    ; r
+    LDAI #114
     STA 0x00FF
 
-    LDAI #'l'
+    ; l
+    LDAI #108
     STA 0x00FF
 
-    LDAI #'d'
+    ; d
+    LDAI #100
     STA 0x00FF
 
-    LDAI #'!'
+    ; !
+    LDAI #33
     STA 0x00FF
 
-    LDAI #10    ; newline (NOT #'\n', avoids stoi errors)
+    ; newline
+    LDAI #10
     STA 0x00FF
 
     HLT
