@@ -1,1 +1,74 @@
+CPU SCHEMATIC DESCRIPTION
+
+Blocks in the diagram:
+
+1. Register File
+   - Contains A, B, PC, SP, and FLAGS (Z, C).
+   - A and B connect to the ALU.
+   - PC connects to the address bus to select the next instruction in memory.
+
+2. ALU (Arithmetic Logic Unit)
+   - 8-bit unit that performs ADD and SUB on inputs A and B.
+   - Outputs the result back into A.
+   - Updates flags Z and C based on the result.
+
+3. Control Unit
+   - Reads the opcode at the address pointed to by PC.
+   - Decodes which instruction (LDAI, STA, ADD, SUB, JMP, etc.) to execute.
+   - Generates control signals to:
+     - Load A or B
+     - Read or write memory
+     - Update PC (increment or jump)
+
+4. Memory
+   - 64 KB byte-addressable memory.
+   - Connected to a 16-bit address bus and 8-bit data bus.
+   - Contains both program code (starting at 0x0100) and data variables.
+   - Special address 0x00FF is memory-mapped I/O:
+     writing to 0x00FF sends a character to the console.
+
+5. Buses
+   - 16-bit Address Bus:
+     carries addresses from PC (or internal address registers) to memory.
+   - 8-bit Data Bus:
+     carries instruction bytes and data between memory, registers, and ALU.
+
+6. Memory-Mapped I/O Block
+   - Conceptually shown as a small box connected to memory at address 0x00FF.
+   - When the CPU executes STA 0x00FF, the byte in A is sent to this output block,
+     which displays it on the console in the emulator.
+
+Typical Fetch–Decode–Execute Cycle:
+
+1. Fetch:
+   - PC places its value on the address bus.
+   - Memory returns the opcode at that address onto the data bus.
+   - Control unit stores the opcode and increments PC.
+
+2. Decode:
+   - Control unit decodes the opcode to determine which instruction it is.
+   - If the instruction has operands (like an immediate or 16-bit address),
+     the control unit fetches the next one or two bytes from memory and increments PC accordingly.
+
+3. Execute:
+   - For load/store:
+     - LDAI: immediate value is loaded into A.
+     - LDA: memory at the 16-bit address is loaded into A.
+     - STA: A is written to memory at the 16-bit address (0x00FF for console output).
+   - For arithmetic:
+     - ADD: ALU computes A + B, writes result back to A, updates Z and C.
+     - SUB: ALU computes A - B, writes result back to A, updates Z and C.
+   - For branching:
+     - JMP: PC is set to the target address.
+     - JZ/JNZ: PC is conditionally set based on Z flag.
+   - For HLT:
+     - Control unit stops the fetch–decode–execute loop.
+
+This is the diagram you can draw as boxes:
+- "Registers" box
+- "ALU" box
+- "Control Unit" box
+- "Memory" box
+- "I/O (0x00FF)" box
+connected by address and data buses.
 
