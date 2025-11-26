@@ -1,6 +1,3 @@
-; hello.asm - prints "Hello, World!"
-; Program origin assumed 0x0100
-
 START:
     LDAI #'H'
     STA 0x00FF
@@ -45,4 +42,3 @@ START:
     STA 0x00FF
 
     HLT
-
