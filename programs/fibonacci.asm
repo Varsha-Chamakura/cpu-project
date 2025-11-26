@@ -1,37 +1,27 @@
-; fibonacci.asm
-; A = current
-; B = next
-; memory[VAR_TMP] = temp
-
-VAR_TMP = 0x0200   ; scratch variable in RAM (you can “hard-code” with LDA/STA)
-
 START:
-    ; A = 0, B = 1
+    ; Print 0
     LDAI #0
-    STA 0x00FF      ; print 0
+    STA 0x00FF
 
+    ; Print 1
     LDAI #1
-    STA 0x00FF      ; print 1
-    ; now set A=0, B=1 in registers
+    STA 0x00FF
+
+    ; Now setup A = 0, B = 1
     LDAI #0
     LDBI #1
 
-FIB_LOOP:
-    ; temp = A + B
-    ADD             ; A = A + B
-    STA VAR_TMP     ; temp = A
-                    ; (Note: A now = next Fibonacci)
+LOOP:
+    ADD         ; A = A + B
+    STA 0x00FF  ; print the new value
 
-    ; print current (A)
-    STA 0x00FF
+    ; Swap A and B using memory at 0x0200 and 0x0201
+    STA 0x0200   ; TEMP = A
+    LDA 0x0201   ; A = previous B
+    LDB 0x0200   ; B = new number
 
-    ; new A = old B
-    LDA VAR_TMP     ; A = temp (next Fibonacci)
-    ; to make this a standard pattern you'd swap A/B here and re-add, but
-    ; for simplicity this example just shows repeated addition & output.
-    ; You can refine the algorithm to be mathematically exact.
+    STA 0x0201   ; store updated B for next swap
 
-    JMP FIB_LOOP
+    JMP LOOP
 
     HLT
-
