@@ -1,28 +1,38 @@
-; Very simple Fibonacci printer
+; Simple Fibonacci that actually works
+
+; Memory layout:
+; 0x0200 = F0 (current)
+; 0x0201 = F1 (next)
+; 0x0202 = TEMP
 
 START:
-    ; Print 0
+    ; Initialize F0 = 0
     LDAI #0
-    STA 0x00FF
+    STA 0x0200
+    STA 0x00FF    ; print 0
 
-    ; Print 1
+    ; Initialize F1 = 1
     LDAI #1
-    STA 0x00FF
-
-    ; Setup registers A=0, B=1
-    LDAI #0
-    LDBI #1
+    STA 0x0201
+    STA 0x00FF    ; print 1
 
 LOOP:
+    ; TEMP = F0 + F1
+    LDA 0x0200    ; A = F0
+    LDB 0x0201    ; B = F1
     ADD           ; A = A + B
-    STA 0x00FF    ; print byte
+    STA 0x0202    ; TEMP = A
 
-    ; Swap A and B using TEMP at 0x0200
-    STA 0x0200    ; TEMP = A
-    LDA 0x0201    ; A = previous B
-    LDB 0x0200    ; B = new value
+    ; print TEMP
+    STA 0x00FF
 
-    STA 0x0201    ; store updated B
+    ; F0 = F1
+    LDA 0x0201
+    STA 0x0200
+
+    ; F1 = TEMP
+    LDA 0x0202
+    STA 0x0201
 
     JMP LOOP
 
