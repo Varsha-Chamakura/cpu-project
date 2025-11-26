@@ -1,3 +1,5 @@
+; Very simple Fibonacci printer
+
 START:
     ; Print 0
     LDAI #0
@@ -7,20 +9,20 @@ START:
     LDAI #1
     STA 0x00FF
 
-    ; Now setup A = 0, B = 1
+    ; Setup registers A=0, B=1
     LDAI #0
     LDBI #1
 
 LOOP:
-    ADD         ; A = A + B
-    STA 0x00FF  ; print the new value
+    ADD           ; A = A + B
+    STA 0x00FF    ; print byte
 
-    ; Swap A and B using memory at 0x0200 and 0x0201
-    STA 0x0200   ; TEMP = A
-    LDA 0x0201   ; A = previous B
-    LDB 0x0200   ; B = new number
+    ; Swap A and B using TEMP at 0x0200
+    STA 0x0200    ; TEMP = A
+    LDA 0x0201    ; A = previous B
+    LDB 0x0200    ; B = new value
 
-    STA 0x0201   ; store updated B for next swap
+    STA 0x0201    ; store updated B
 
     JMP LOOP
 
